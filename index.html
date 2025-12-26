@@ -1,0 +1,740 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="PLILL software for screen capture, screen recording, recorded video and audio messages, and video/audio conferencing. Downloadable apps and a SaaS web application." />
+
+  <!-- No indexing / no caching by search engines and bots -->
+  <meta name="robots" content="noindex,nofollow,noarchive,nosnippet,noimageindex,notranslate,max-snippet:0,max-image-preview:none,max-video-preview:0" />
+  <meta name="googlebot" content="noindex,nofollow,noarchive,nosnippet,noimageindex,max-snippet:0,max-image-preview:none,max-video-preview:0" />
+  <meta name="bingbot" content="noindex,nofollow,noarchive,nosnippet,noimageindex,max-snippet:0,max-image-preview:none,max-video-preview:0" />
+
+  <title>PLILL | Screen Recording, Recorded Video & Audio Messages, and Conferencing Software</title>
+  <style>
+    :root{
+      --bg:#0b1020;
+      --panel:#0f1733;
+      --text:#e9eefc;
+      --muted:#b6c3e6;
+      --faint:#7f8bb0;
+      --brand:#6ee7ff;
+      --brand2:#a78bfa;
+      --ok:#34d399;
+      --line:rgba(255,255,255,.10);
+      --shadow: 0 18px 60px rgba(0,0,0,.35);
+      --radius: 18px;
+      --radius2: 14px;
+      --max: 1100px;
+      --focus: 2px solid rgba(110,231,255,.95);
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(900px 500px at 10% 10%, rgba(110,231,255,.14), transparent 60%),
+        radial-gradient(900px 500px at 90% 20%, rgba(167,139,250,.14), transparent 60%),
+        radial-gradient(900px 650px at 50% 90%, rgba(52,211,153,.10), transparent 60%),
+        linear-gradient(180deg, var(--bg), #070b18 70%, #050714);
+      line-height:1.45;
+      letter-spacing:.2px;
+    }
+
+    a{ color:inherit; }
+    a:focus-visible, button:focus-visible, input:focus-visible, summary:focus-visible{
+      outline:var(--focus);
+      outline-offset:3px;
+      border-radius:12px;
+    }
+    ::selection{ background: rgba(110,231,255,.25); }
+
+    .skip-link{
+      position:absolute; left:-999px; top:10px;
+      background: #ffffff;
+      color:#0b1020;
+      padding:.6rem .9rem;
+      border-radius:12px;
+      font-weight:700;
+      z-index:999;
+      box-shadow: var(--shadow);
+    }
+    .skip-link:focus{ left:10px; }
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:50;
+      backdrop-filter: blur(12px);
+      background: rgba(7,11,24,.62);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav{
+      max-width:var(--max);
+      margin:0 auto;
+      padding: 14px 18px;
+      display:flex;
+      gap:14px;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width: 140px;
+      text-decoration:none;
+    }
+    .mark{
+      width:34px;
+      height:34px;
+      border-radius:12px;
+      background:
+        linear-gradient(135deg, rgba(110,231,255,.95), rgba(167,139,250,.85));
+      box-shadow: 0 10px 30px rgba(110,231,255,.10);
+      border: 1px solid rgba(255,255,255,.18);
+    }
+    .brand b{
+      font-size: 15px;
+      letter-spacing:.9px;
+    }
+    .brand small{
+      display:block;
+      color:var(--muted);
+      font-weight:500;
+      font-size:12px;
+      margin-top:1px;
+      letter-spacing:.2px;
+    }
+    .nav-links{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    .nav-links a{
+      text-decoration:none;
+      color:var(--muted);
+      font-weight:600;
+      font-size:13px;
+      padding:8px 10px;
+      border-radius: 12px;
+    }
+    .nav-links a:hover{ color:var(--text); background: rgba(255,255,255,.06); }
+
+    .cta{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:.5rem;
+      font-weight:800;
+      font-size:14px;
+      letter-spacing:.2px;
+      text-decoration:none;
+      padding: 11px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      transition: transform .08s ease, background .12s ease, border-color .12s ease;
+      white-space: nowrap;
+    }
+    .cta:hover{ background: rgba(255,255,255,.10); border-color: rgba(255,255,255,.22); }
+    .cta:active{ transform: translateY(1px); }
+
+    .cta.primary{
+      background: linear-gradient(135deg, rgba(110,231,255,.95), rgba(167,139,250,.90));
+      border-color: rgba(255,255,255,.22);
+      color: #091022;
+    }
+    .cta.primary:hover{
+      background: linear-gradient(135deg, rgba(110,231,255,1), rgba(167,139,250,1));
+    }
+    .cta.secondary{
+      background: rgba(110,231,255,.10);
+      border-color: rgba(110,231,255,.24);
+      color: var(--text);
+    }
+
+    main{ display:block; }
+    .wrap{
+      max-width:var(--max);
+      margin:0 auto;
+      padding: 28px 18px 70px;
+    }
+
+    .hero{
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 26px;
+      align-items: stretch;
+      margin-top: 18px;
+    }
+    @media (max-width: 960px){
+      .hero{ grid-template-columns: 1fr; }
+      header{ position:relative; }
+    }
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .card.pad{ padding: 22px; }
+
+    h1{
+      margin: 0 0 10px;
+      font-size: clamp(30px, 3.5vw, 46px);
+      letter-spacing: .4px;
+      line-height: 1.1;
+    }
+    .subhead{
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: clamp(15px, 1.3vw, 17px);
+      max-width: 65ch;
+    }
+
+    .badges{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin: 14px 0 18px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.05);
+      color: var(--muted);
+      font-weight:700;
+      font-size:12px;
+      letter-spacing:.15px;
+    }
+    .dot{
+      width:8px; height:8px; border-radius:99px;
+      background: var(--brand);
+      box-shadow: 0 0 0 3px rgba(110,231,255,.12);
+    }
+    .dot.purple{ background: var(--brand2); box-shadow: 0 0 0 3px rgba(167,139,250,.12); }
+    .dot.green{ background: var(--ok); box-shadow: 0 0 0 3px rgba(52,211,153,.12); }
+
+    .hero-ctas{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin: 14px 0 10px;
+    }
+    .platform-note{
+      margin: 0;
+      color: var(--faint);
+      font-size: 12.5px;
+    }
+    .platform-note b{ color: var(--muted); font-weight:800; }
+
+    .specimen-box{
+      background: radial-gradient(700px 260px at 10% 10%, rgba(110,231,255,.16), transparent 55%),
+                  radial-gradient(700px 260px at 90% 10%, rgba(167,139,250,.16), transparent 55%),
+                  linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      border-bottom: 1px solid var(--line);
+      padding: 22px;
+    }
+    .specimen-title{
+      display:flex;
+      align-items:baseline;
+      justify-content:space-between;
+      gap:14px;
+      flex-wrap:wrap;
+    }
+    .specimen-title h2{
+      margin:0;
+      font-size: 18px;
+      letter-spacing:.3px;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: var(--muted);
+      font-weight:800;
+      font-size:12px;
+    }
+    .specimen-body{
+      margin-top: 14px;
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:12px;
+    }
+    .specimen-body p{
+      margin:0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .list{
+      margin: 0;
+      padding: 0;
+      list-style:none;
+      display:grid;
+      gap:10px;
+    }
+    .list li{
+      padding: 12px 12px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.10);
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .list li b{ color: var(--text); }
+
+    section{
+      margin-top: 22px;
+      scroll-margin-top: 80px;
+    }
+    .section-head{
+      display:flex;
+      align-items:baseline;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      margin: 0 0 12px;
+    }
+    .section-head h2{
+      margin: 0;
+      font-size: 20px;
+      letter-spacing:.25px;
+    }
+    .section-head p{
+      margin: 0;
+      color: var(--faint);
+      font-size: 13px;
+      max-width: 70ch;
+    }
+
+    .grid3{
+      display:grid;
+      gap: 12px;
+      grid-template-columns: repeat(3, 1fr);
+    }
+    @media (max-width: 900px){ .grid3{ grid-template-columns: 1fr; } }
+
+    .feature{
+      padding: 16px;
+      border-radius: var(--radius2);
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.10);
+    }
+    .feature h3{
+      margin: 0 0 6px;
+      font-size: 15px;
+      letter-spacing:.2px;
+    }
+    .feature p{
+      margin:0;
+      color: var(--muted);
+      font-size: 13.5px;
+    }
+
+    .two-ways{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 900px){ .two-ways{ grid-template-columns: 1fr; } }
+
+    .way{
+      padding: 18px;
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+      border: 1px solid rgba(255,255,255,.12);
+    }
+    .way h3{ margin: 0 0 8px; font-size: 16px; }
+    .way p{ margin: 0 0 12px; color: var(--muted); font-size: 13.5px; }
+    .way ul{ margin: 0; padding-left: 18px; color: var(--muted); font-size: 13.5px; }
+    .way li{ margin: 6px 0; }
+    .way .cta{ margin-top: 12px; }
+
+    .usecases{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 900px){ .usecases{ grid-template-columns: 1fr; } }
+
+    .case{
+      padding: 16px;
+      border-radius: var(--radius2);
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.10);
+    }
+    .case h3{ margin:0 0 6px; font-size: 15px; }
+    .case p{ margin:0; color: var(--muted); font-size: 13.5px; }
+
+    details{
+      border-radius: var(--radius2);
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.10);
+      padding: 12px 14px;
+    }
+    details + details{ margin-top: 10px; }
+    summary{
+      cursor:pointer;
+      font-weight:800;
+      color: var(--text);
+      font-size: 14px;
+      list-style:none;
+    }
+    summary::-webkit-details-marker{ display:none; }
+    details p{
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 13.5px;
+    }
+
+    footer{
+      border-top: 1px solid var(--line);
+      background: rgba(255,255,255,.02);
+      margin-top: 26px;
+    }
+    .footer-inner{
+      max-width:var(--max);
+      margin: 0 auto;
+      padding: 20px 18px;
+      display:flex;
+      gap: 12px;
+      align-items:flex-start;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
+    .foot-left p{
+      margin: 0 0 6px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .foot-left .spec-line{
+      color: var(--faint);
+      font-size: 12.5px;
+      margin-top: 4px;
+    }
+    .foot-links{
+      display:flex;
+      gap: 12px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:flex-end;
+    }
+    .foot-links a{
+      color: var(--muted);
+      text-decoration:none;
+      font-weight:700;
+      font-size: 13px;
+      padding: 8px 10px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+    }
+    .foot-links a:hover{ color: var(--text); background: rgba(255,255,255,.06); }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header aria-label="Site header">
+    <nav class="nav" aria-label="Primary">
+      <a class="brand" href="#top" aria-label="PLILL home">
+        <span class="mark" aria-hidden="true"></span>
+        <span>
+          <b>PLILL</b>
+          <small>Screen recording, recorded video and audio messages, and conferencing software</small>
+        </span>
+      </a>
+
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#two-ways">Two ways to use</a>
+        <a href="#use-cases">Use cases</a>
+        <a href="#faq">FAQ</a>
+        <a class="cta" href="#download">Download</a>
+        <a class="cta secondary" href="#webapp">Web app</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main" class="wrap">
+    <div id="top" class="hero" aria-label="Hero">
+      <section class="card pad" aria-label="Hero copy">
+        <div class="badges" aria-label="Product highlights">
+          <span class="badge"><span class="dot" aria-hidden="true"></span> Screen capture and screen recording software</span>
+          <span class="badge"><span class="dot purple" aria-hidden="true"></span> Recorded video and recorded audio message software</span>
+          <span class="badge"><span class="dot green" aria-hidden="true"></span> Video and audio conferencing software</span>
+        </div>
+
+        <h1>PLILL</h1>
+        <p class="subhead">
+          PLILL is software that helps teams record, edit, and replay video and audio, capture screens, and collaborate with recorded video and recorded audio messages within the PLILL application. Use PLILL as a downloadable application or as a web application.
+        </p>
+
+        <div class="hero-ctas" aria-label="Primary calls to action">
+          <a class="cta primary" href="#download">Download PLILL</a>
+          <a class="cta secondary" href="#webapp">Use PLILL in your browser</a>
+        </div>
+        <p class="platform-note">
+          Available as <b>Downloadable software</b> (Mac and Windows) and a <b>Web application (SaaS)</b> in modern browsers.
+        </p>
+      </section>
+
+      <aside class="card" aria-label="Trademark specimen-ready product description">
+        <div class="specimen-box">
+          <div class="specimen-title">
+            <h2>What PLILL is</h2>
+            <span class="pill" aria-label="Classification note">Software (IC 009) and SaaS (IC 042)</span>
+          </div>
+          <div class="specimen-body">
+            <p>
+              PLILL is offered as downloadable computer software and as software as a service (SaaS) featuring software for the same functions.
+            </p>
+            <ul class="list" aria-label="Software identifications">
+              <li><b>Downloadable computer software</b> for screen capture and screen recording.</li>
+              <li><b>Downloadable computer software</b> for recording, editing, and playback of video and audio.</li>
+              <li><b>Downloadable computer software</b> for creating, sending, and receiving recorded video and recorded audio messages for workplace collaboration within the software.</li>
+              <li><b>Downloadable computer software</b> for video conferencing and <b>downloadable computer software</b> for audio conferencing.</li>
+              <li><b>Software as a service (SaaS)</b> services featuring software for the same functions, available through a web application.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card pad" style="border:0; border-top:1px solid var(--line); border-radius:0; background:transparent; box-shadow:none;">
+          <div class="section-head" style="margin:0 0 10px;">
+            <h2 style="font-size:16px; margin:0;">Get started</h2>
+            <p style="margin:0;">Choose the form that fits your workflow.</p>
+          </div>
+          <div class="hero-ctas" style="margin:0;">
+            <a class="cta" href="#download">Download PLILL</a>
+            <a class="cta secondary" href="#webapp">Sign in to the PLILL web app</a>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <section id="features" class="card pad" aria-label="Features">
+      <div class="section-head">
+        <h2>Features</h2>
+        <p>Focused on capturing, recording, editing, playback, recorded video and audio messages, and conferencing within PLILL software.</p>
+      </div>
+
+      <div class="grid3" role="list">
+        <div class="feature" role="listitem">
+          <h3>Screen capture and screen recording</h3>
+          <p>Capture your screen and record your screen as video, with options suitable for quick demonstrations and walkthroughs.</p>
+        </div>
+        <div class="feature" role="listitem">
+          <h3>Record, edit, and playback</h3>
+          <p>Create video and audio recordings, make edits, and play back content to review and refine what you share.</p>
+        </div>
+        <div class="feature" role="listitem">
+          <h3>Recorded video and recorded audio messages</h3>
+          <p>Create recorded messages for workplace collaboration in PLILL, with playback designed for clear review and response.</p>
+        </div>
+        <div class="feature" role="listitem">
+          <h3>Video conferencing software</h3>
+          <p>Join and host video conferences using PLILL software, designed for meetings and shared understanding.</p>
+        </div>
+        <div class="feature" role="listitem">
+          <h3>Audio conferencing software</h3>
+          <p>Use audio conferencing in PLILL software when voice-only is the right fit for the moment.</p>
+        </div>
+        <div class="feature" role="listitem">
+          <h3>Available as app or web application</h3>
+          <p>Use PLILL as downloadable computer software or access the same software functions through a SaaS web application.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="two-ways" class="card pad" aria-label="Two ways to use PLILL">
+      <div class="section-head">
+        <h2>Two ways to use PLILL</h2>
+        <p>Choose the format you prefer. Both options provide PLILL software for screen recording, recorded video and audio, recorded messages, and conferencing.</p>
+      </div>
+
+      <div class="two-ways">
+        <article class="way" aria-label="Downloadable software">
+          <h3>Downloadable computer software (IC 009)</h3>
+          <p>
+            Install PLILL as downloadable computer software for screen capture, screen recording, video and audio recording, editing, playback, recorded messages, and conferencing.
+          </p>
+          <ul>
+            <li>Mac and Windows</li>
+            <li>Designed for reliable capture and recording</li>
+            <li>Local application workflow</li>
+          </ul>
+          <a class="cta primary" href="#download">Download PLILL</a>
+        </article>
+
+        <article class="way" aria-label="Web application SaaS">
+          <h3>Web application (SaaS) services (IC 042)</h3>
+          <p>
+            Use PLILL as software as a service (SaaS) featuring software for screen capture, screen recording, recording, editing, playback, recorded messages, and conferencing, accessible through your browser.
+          </p>
+          <ul>
+            <li>Modern desktop browsers</li>
+            <li>No installation required for web access</li>
+            <li>Sign-in based web application workflow</li>
+          </ul>
+          <a class="cta secondary" href="#webapp">Sign in to the PLILL web app</a>
+        </article>
+      </div>
+    </section>
+
+    <section id="use-cases" class="card pad" aria-label="Use cases">
+      <div class="section-head">
+        <h2>Use cases</h2>
+        <p>Practical ways teams use PLILL software for recording, editing, playback, recorded messages, and conferencing.</p>
+      </div>
+
+      <div class="usecases">
+        <div class="case">
+          <h3>Product walkthroughs</h3>
+          <p>Record your screen and narrate a feature overview, then edit and share the resulting recorded video or recorded audio message for review.</p>
+        </div>
+        <div class="case">
+          <h3>Bug reproduction and QA notes</h3>
+          <p>Capture a screen recording that shows steps to reproduce an issue, then play it back during review sessions.</p>
+        </div>
+        <div class="case">
+          <h3>Training and onboarding</h3>
+          <p>Create a library of recorded video and audio content for repeatable training, with editing for clarity and concise playback.</p>
+        </div>
+        <div class="case">
+          <h3>Team updates</h3>
+          <p>Use recorded video and recorded audio messages for workplace collaboration when an update benefits from voice and visuals.</p>
+        </div>
+        <div class="case">
+          <h3>Meetings and discussions</h3>
+          <p>Use PLILL’s video conferencing and audio conferencing software for scheduled discussions and collaborative review.</p>
+        </div>
+        <div class="case">
+          <h3>Review and feedback loops</h3>
+          <p>Record a draft, edit it, and share for playback so stakeholders can review content precisely and respond with context.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq" class="card pad" aria-label="FAQ">
+      <div class="section-head">
+        <h2>FAQ</h2>
+        <p>Short answers about how PLILL is offered and what it does.</p>
+      </div>
+
+      <details>
+        <summary>Is PLILL a downloadable application or a web application?</summary>
+        <p>
+          Both. PLILL is offered as downloadable computer software and as software as a service (SaaS) featuring software for the same functions through a web application.
+        </p>
+      </details>
+
+      <details>
+        <summary>What does PLILL software help me do?</summary>
+        <p>
+          PLILL software supports screen capture, screen recording, recording, editing, and playback of video and audio, creating recorded video and recorded audio messages for workplace collaboration, and video and audio conferencing.
+        </p>
+      </details>
+
+      <details>
+        <summary>Does PLILL support video and audio conferencing?</summary>
+        <p>
+          Yes. PLILL is offered as downloadable computer software for video conferencing and downloadable computer software for audio conferencing, and the SaaS web application features software for the same functions.
+        </p>
+      </details>
+
+      <details>
+        <summary>What platforms are available?</summary>
+        <p>
+          PLILL is available for Mac and Windows as downloadable software, and in modern browsers as a web application (SaaS).
+        </p>
+      </details>
+    </section>
+
+    <section id="download" class="card pad" aria-label="Download section">
+      <div class="section-head">
+        <h2>Download PLILL</h2>
+        <p>Downloadable computer software for screen capture, screen recording, recording, editing, playback, recorded messages, and conferencing.</p>
+      </div>
+
+      <div class="grid3" role="list">
+        <div class="feature" role="listitem">
+          <h3>Download for Mac</h3>
+          <p><a class="cta primary" href="/downloads/plill-mac.html">Download PLILL (Mac)</a></p>
+          <p class="platform-note" style="margin-top:10px;">Mac downloadable computer software.</p>
+        </div>
+        <div class="feature" role="listitem">
+          <h3>Download for Windows</h3>
+          <p><a class="cta primary" href="/downloads/plill-windows.html">Download PLILL (Windows)</a></p>
+          <p class="platform-note" style="margin-top:10px;">Windows downloadable computer software.</p>
+        </div>
+        <div class="feature" role="listitem">
+          <h3>System requirements</h3>
+          <p>PLILL runs on supported versions of Mac and Windows and in modern desktop browsers for the web application.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="webapp" class="card pad" aria-label="Web application section">
+      <div class="section-head">
+        <h2>Use PLILL in your browser</h2>
+        <p>Software as a service (SaaS) services featuring software for screen capture, screen recording, recording, editing, playback, recorded messages, and conferencing.</p>
+      </div>
+
+      <div class="grid3" role="list">
+        <div class="feature" role="listitem">
+          <h3>Sign in</h3>
+          <p><a class="cta secondary" href="#webapp">Sign in to the PLILL web app</a></p>
+          <p class="platform-note" style="margin-top:10px;">Browser-based software access.</p>
+        </div>
+        <div class="feature" role="listitem">
+          <h3>Start an in-app conference</h3>
+          <p>Create or join a video conference or audio conference as a software feature within the PLILL web application.</p>
+        </div>
+        <div class="feature" role="listitem">
+          <h3>Record and replay</h3>
+          <p>Record video and audio in the web application, edit for clarity, and replay for review.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer aria-label="Footer">
+    <div class="footer-inner">
+      <div class="foot-left">
+        <p><strong>PLILL</strong> software for screen capture and screen recording; recording, editing, and playback of video and audio; recorded video and recorded audio messages for workplace collaboration; and video and audio conferencing. Offered as downloadable computer software and as a SaaS web application.</p>
+        <p class="spec-line">Specimen-friendly mark display: <strong>PLILL</strong></p>
+        <p class="spec-line">© <span id="y">2025</span> PLILL. All rights reserved.</p>
+      </div>
+      <div class="foot-links" aria-label="Footer links">
+        <a href="#terms" aria-label="Terms">Terms</a>
+        <a href="#privacy" aria-label="Privacy">Privacy</a>
+        <a href="#top" aria-label="Back to top">Back to top</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      var el = document.getElementById('y');
+      if (el) el.textContent = String(new Date().getFullYear());
+    })();
+  </script>
+</body>
+</html>
